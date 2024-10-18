@@ -125,3 +125,13 @@ C:\EjercicioGuiaEnGitHub\MiEjercicioGuia1\clienteEjercicioGuia\WindowsFormsAppli
 C:\EjercicioGuiaEnGitHub\MiEjercicioGuia1\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.CoreCompileInputs.cache
 C:\EjercicioGuiaEnGitHub\MiEjercicioGuia1\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\EjercicioGuiaEnGitHub\MiEjercicioGuia1\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.AssemblyReference.cache
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.cache
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.CoreCompileInputs.cache
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\SO\S6\Del6.2\clienteEjercicioGuia\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
