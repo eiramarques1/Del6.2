@@ -40,6 +40,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.contLbl = new System.Windows.Forms.Label();
+            this.alturaBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +77,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.groupBox1.Controls.Add(this.alturaBox);
             this.groupBox1.Controls.Add(this.Mayusculas);
             this.groupBox1.Controls.Add(this.Palindromo);
             this.groupBox1.Controls.Add(this.Longitud);
@@ -182,6 +184,14 @@
             this.contLbl.Size = new System.Drawing.Size(0, 20);
             this.contLbl.TabIndex = 10;
             // 
+            // alturaBox
+            // 
+            this.alturaBox.Location = new System.Drawing.Point(56, 152);
+            this.alturaBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.alturaBox.Name = "alturaBox";
+            this.alturaBox.Size = new System.Drawing.Size(67, 26);
+            this.alturaBox.TabIndex = 11;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -217,6 +227,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label contLbl;
+        private System.Windows.Forms.TextBox alturaBox;
     }
 }
 

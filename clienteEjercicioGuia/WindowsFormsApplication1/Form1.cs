@@ -8,29 +8,68 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
         Socket server;
+        Thread atender;
         public Form1()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false; //Necesario para que los elementos de los formularios puedan ser
+            //accedidos desde threads diferentes a los que los crearon
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
 
-           
         }
 
+        private void AtenderServidor()
+        {
+            while (true)
+            {
+                //Recibimos mensaje del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                string[] trozos = Encoding.ASCII.GetString(msg2).Split('/');
+                int codigo = Convert.ToInt32(trozos[0]);
+                string mensaje = mensaje = trozos[1].Split('\0')[0];
+
+                switch (codigo)
+                {
+                    case 1:  // respuesta a longitud
+
+                        MessageBox.Show("La longitud de tu nombre es: " + mensaje);
+                        break;
+                    case 2:      //respuesta a si mi nombre es bonito
+
+                        if (mensaje == "SI")
+                            MessageBox.Show("Tu nombre ES bonito.");
+                        else
+                            MessageBox.Show("Tu nombre NO bonito. Lo siento.");
+                        break;
+                    case 3:       //Recibimos la respuesta de si soy alto
+
+                        MessageBox.Show(mensaje);
+                        break;
+                    case 4:     //Recibimos notificacion
+
+                        contLbl.Text = mensaje;
+                        break;
+                }
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.101");
-            IPEndPoint ipep = new IPEndPoint(direc, 9000);
+            IPEndPoint ipep = new IPEndPoint(direc, 9050);
 
 
             //Creamos el socket 
@@ -40,9 +79,13 @@ namespace WindowsFormsApplication1
                 server.Connect(ipep);//Intentamos conectar el socket
                 this.BackColor = Color.Green;
                 MessageBox.Show("Conectado");
-            }
+                //pongo en marcha el thread que atenderá los mensajes del servidor
+                ThreadStart ts = delegate { AtenderServidor(); };
+                atender = new Thread(ts);
+                atender.Start();
 
-            catch (SocketException)
+            }
+            catch (SocketException ex)
             {
                 //Si hay excepcion imprimimos error y salimos del programa con return 
                 MessageBox.Show("No he podido conectar con el servidor");
@@ -52,85 +95,33 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Verificar si el servidor está conectado
-            if (server == null || !server.Connected)
-            {
-                MessageBox.Show("Primero debes conectarte al servidor.");
-                return;
-            }
 
             if (Longitud.Checked)
             {
-                // Quiere saber la longitud
                 string mensaje = "1/" + nombre.Text;
                 // Enviamos al servidor el nombre tecleado
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show("La longitud de tu nombre es: " + mensaje);
             }
+
             else if (Bonito.Checked)
             {
-                // Quiere saber si el nombre es bonito
                 string mensaje = "2/" + nombre.Text;
                 // Enviamos al servidor el nombre tecleado
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-
-
-                if (mensaje == "SI")
-                    MessageBox.Show("Tu nombre ES bonito.");
-                else
-                    MessageBox.Show("Tu nombre NO es bonito. Lo siento.");
-
-
-            }
-
-            else if (Palindromo.Checked)
-            {
-                // Quiere saber si el nombre es palíndromo
-                string mensaje = "3/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-
-
-                if (mensaje == "SI")
-                    MessageBox.Show("Tu nombre ES palíndromo.");
-                else
-                    MessageBox.Show("Tu nombre NO es palíndromo.");
             }
 
             else
             {
-                // Quiere el nombre en mayúsculas
-                string mensaje = "4/" + nombre.Text;
+                // Enviamos nombre y altura
+                string mensaje = "3/" + nombre.Text + "/" + alturaBox.Text;
                 // Enviamos al servidor el nombre tecleado
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show("Tu nombre en mayúsculas es: " + mensaje);
             }
-
         }
+
         private void radioButton1_CheckedChanged_1(object sender, EventArgs e)
         {
             // Lógica para manejar el evento CheckedChanged del radioButton1
@@ -141,10 +132,11 @@ namespace WindowsFormsApplication1
             //Mensaje de desconexión
             string mensaje = "0/";
 
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes (mensaje);
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
 
             // Nos desconectamos
+            atender.Abort();
             this.BackColor = Color.Gray;
             server.Shutdown(SocketShutdown.Both);
             server.Close();
